@@ -1,38 +1,48 @@
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
 *.py[cod]
 
 # C extensions
 *.so
 
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+docs/generated/
+*.egg-info/
 .installed.cfg
-lib
-lib64
+*.egg
 
 # Installer logs
 pip-log.txt
 
 # Unit test / coverage reports
+htmlcov/
+.tox/
 .coverage
-.tox
+.coverage.*
+.cache
 nosetests.xml
+coverage.xml
+*,cover
 
 # Translations
 *.mo
 
 # Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
+.DS_Store
 
 # Complexity
 output/*.html
@@ -40,6 +50,9 @@ output/*/index.html
 
 # Sphinx
 docs/_build
+
+### IPythonNotebook ###
+.ipynb_checkpoints/
 
 # Cookiecutter
 output/
