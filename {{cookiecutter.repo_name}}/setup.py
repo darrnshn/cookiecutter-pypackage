@@ -69,6 +69,7 @@ setup(
     tests_require=[
         'pytest',
         'pytest-cov',
+        'coverage',
         'codecov',
         'tox',
     ],
