@@ -43,15 +43,16 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            '{{ cookiecutter.repo_name }}_cli_script = scripts.{{ cookiecutter.repo_name }}_cli_script:cli'
+            '{{ cookiecutter.repo_name }}_cli_script = {{ cookiecutter.repo_name }}.scripts.cli_script:cli'
         ],
         'gui_scripts': [
-            '{{ cookiecutter.repo_name }}_gui_script = scripts.{{ cookiecutter.repo_name }}_gui_script:gui'
+            '{{ cookiecutter.repo_name }}_gui_script = {{ cookiecutter.repo_name }}.scripts.gui_script:gui'
         ]
     },
     install_requires=[
         'scipy',
         'numpy',
+        'pycontracts'
     ],
     extras_require={
         'demos': [
