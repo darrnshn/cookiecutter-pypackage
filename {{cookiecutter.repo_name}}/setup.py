@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages, Extension
 from setuptools.command.test import test as TestCommand
 from setuptools.command.build_ext import build_ext as BuildExtCommand
-import sys
+import sys, os, re
 
 
 class PyTest(TestCommand):
@@ -45,6 +45,44 @@ class get_pybind_include(object):
         import pybind11
         return pybind11.get_include(self.user)
 
+# From https://github.com/dfm/transit/blob/master/setup.py
+def find_eigen(hint=None):
+    """
+    Find the location of the Eigen 3 include directory. This will return
+    ``None`` on failure.
+    """
+    # List the standard locations including a user supplied hint.
+    search_dirs = [] if hint is None else hint
+    search_dirs += [
+        "/usr/local/include/eigen3",
+        "/usr/local/homebrew/include/eigen3",
+        "/opt/local/var/macports/software/eigen3",
+        "/opt/local/include/eigen3",
+        "/usr/include/eigen3",
+        "/usr/include/local",
+        "/usr/include",
+    ]
+
+    # Loop over search paths and check for the existence of the Eigen/Dense
+    # header.
+    for d in search_dirs:
+        path = os.path.join(d, "Eigen", "Dense")
+        if os.path.exists(path):
+            # Determine the version.
+            vf = os.path.join(d, "Eigen", "src", "Core", "util", "Macros.h")
+            if not os.path.exists(vf):
+                continue
+            src = open(vf, "r").read()
+            v1 = re.findall("#define EIGEN_WORLD_VERSION (.+)", src)
+            v2 = re.findall("#define EIGEN_MAJOR_VERSION (.+)", src)
+            v3 = re.findall("#define EIGEN_MINOR_VERSION (.+)", src)
+            if not len(v1) or not len(v2) or not len(v3):
+                continue
+            v = "{0}.{1}.{2}".format(v1[0], v2[0], v3[0])
+            print("Found Eigen version {0} in: {1}".format(v, d))
+            return d
+    return None
+
 ext_modules = [
     Extension(
         '{{ cookiecutter.repo_name }}.ext',
@@ -52,7 +90,8 @@ ext_modules = [
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
-            get_pybind_include(user=True)
+            get_pybind_include(user=True),
+            find_eigen()
         ],
         language='c++'
     ),
@@ -134,7 +173,8 @@ setup(
     install_requires=[
         'scipy',
         'numpy',
-        'pycontracts'
+        'pycontracts',
+        'pybind11'
     ],
     extras_require={
         'demos': [

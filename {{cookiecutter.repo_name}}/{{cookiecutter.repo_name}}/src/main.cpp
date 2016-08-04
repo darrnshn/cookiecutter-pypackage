@@ -1,11 +1,13 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/functional.h>
+#include <pybind11/eigen.h>
 
-int add(int i, int j) {
-    return i + j;
+Eigen::VectorXd add(const Eigen::VectorXd& a, const Eigen::VectorXd& b) {
+    return a + b;
 }
 
-int subtract(int i, int j) {
-    return i - j;
+Eigen::VectorXd subtract(const Eigen::VectorXd& a, const Eigen::VectorXd& b) {
+    return a - b;
 }
 
 namespace py = pybind11;
@@ -22,11 +24,11 @@ PYBIND11_PLUGIN(ext) {
     )pbdoc");
 
     m.def("add", &add, R"pbdoc(
-        Add two numbers
+        Add two vectors
     )pbdoc");
 
     m.def("subtract", &subtract, R"pbdoc(
-        Subtract two numbers
+        Subtract two vectors
     )pbdoc");
 
 #ifdef VERSION_INFO
